@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>မိုးကျော်အောင် | Senior Android Developer · Microsoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Noto+Sans+Myanmar:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-void:    #020408;
+      --bg-card:    #060d14;
+      --bg-panel:   #0a1520;
+      --cyan:       #00f5ff;
+      --magenta:    #ff00aa;
+      --green:      #39ff14;
+      --gold:       #ffd700;
+      --text:       #c8e8ff;
+      --text-dim:   #5a7fa0;
+      --border:     rgba(0,245,255,0.15);
+      --glow-cyan:  0 0 20px rgba(0,245,255,0.6);
+      --glow-mag:   0 0 20px rgba(255,0,170,0.6);
+      --glow-green: 0 0 20px rgba(57,255,20,0.5);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-void);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ─── SCANLINES OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── MATRIX RAIN BG ─── */
+    #matrix-bg {
+      position: fixed; inset: 0;
+      opacity: 0.04;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── HEADER / NAV ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(2,4,8,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .brand {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--cyan);
+      text-decoration: none;
+      text-shadow: var(--glow-cyan);
+      letter-spacing: 2px;
+    }
+
+    .brand span {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      color: var(--magenta);
+      font-size: 0.85rem;
+      display: block;
+      text-shadow: var(--glow-mag);
+      font-weight: 700;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex; gap: 32px;
+    }
+
+    nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s, text-shadow 0.3s;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0; height: 1px;
+      background: var(--cyan);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    nav a:hover { color: var(--cyan); text-shadow: var(--glow-cyan); }
+    nav a:hover::after { transform: scaleX(1); }
+
+    .nav-status {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.65rem; color: var(--text-dim);
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: var(--glow-green);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ─── HERO / SLIDER ─── */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: grid-move 20s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0% { transform: perspective(600px) rotateX(20deg) translateY(0); }
+      100% { transform: perspective(600px) rotateX(20deg) translateY(60px); }
+    }
+
+    .hero-content {
+      position: relative; z-index: 10;
+      padding: 0 80px;
+      max-width: 900px;
+    }
+
+    .hero-tag {
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      color: var(--magenta);
+      text-shadow: var(--glow-mag);
+      margin-bottom: 16px;
+      animation: fadeInDown 0.8s ease both;
+    }
+
+    .hero-name-mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700;
+      color: var(--cyan);
+      text-shadow: var(--glow-cyan), 0 0 60px rgba(0,245,255,0.3);
+      line-height: 1.1;
+      animation: fadeInDown 0.8s 0.1s ease both;
+    }
+
+    .hero-name-en {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 4px;
+      margin-top: 8px;
+      animation: fadeInDown 0.8s 0.2s ease both;
+    }
+
+    .hero-role {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      animation: fadeInDown 0.8s 0.3s ease both;
+    }
+
+    .hero-role strong {
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(255,215,0,0.4);
+    }
+
+    .hero-desc {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      margin-top: 12px;
+      line-height: 1.8;
+      animation: fadeInDown 0.8s 0.4s ease both;
+    }
+
+    .hero-cta {
+      display: flex; gap: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+      animation: fadeInDown 0.8s 0.5s ease both;
+    }
+
+    .btn-cyber {
+      padding: 12px 28px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .btn-cyber::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--cyan);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+      z-index: -1;
+    }
+
+    .btn-cyber:hover { color: var(--bg-void); text-shadow: none; }
+    .btn-cyber:hover::before { transform: scaleX(1); }
+
+    .btn-cyber.mag {
+      border-color: var(--magenta);
+      color: var(--magenta);
+    }
+    .btn-cyber.mag::before { background: var(--magenta); }
+
+    .hero-glyph {
+      position: absolute;
+      right: 80px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: clamp(8rem, 15vw, 16rem);
+      font-weight: 700;
+      color: rgba(0,245,255,0.04);
+      line-height: 1;
+      pointer-events: none;
+      animation: float-glyph 8s ease-in-out infinite;
+      user-select: none;
+    }
+
+    @keyframes float-glyph {
+      0%,100% { transform: translateY(-50%) rotate(-2deg); }
+      50% { transform: translateY(calc(-50% - 20px)) rotate(2deg); }
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 60px; right: 80px;
+      display: flex; gap: 48px;
+      animation: fadeInUp 1s 0.6s ease both;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--cyan);
+      text-shadow: var(--glow-cyan);
+    }
+    .stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .stat-label-mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.65rem;
+      color: var(--magenta);
+    }
+
+    @keyframes fadeInDown {
+      from { opacity:0; transform: translateY(-20px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(20px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section.page-section {
+      position: relative;
+      z-index: 10;
+      padding: 100px 80px;
+    }
+
+    .section-header {
+      margin-bottom: 60px;
+    }
+
+    .section-tag {
+      font-size: 0.6rem;
+      letter-spacing: 4px;
+      color: var(--magenta);
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 900;
+      color: #fff;
+      margin-top: 8px;
+    }
+
+    .section-title-mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 1.4rem;
+      color: var(--cyan);
+      text-shadow: var(--glow-cyan);
+      margin-top: 4px;
+    }
+
+    .section-line {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      margin-top: 16px;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-dim);
+      line-height: 1.9;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .about-text p.mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.95rem;
+      color: rgba(200,232,255,0.7);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .skill-bar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+
+    .skill-bar::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: linear-gradient(90deg, rgba(0,245,255,0.1), transparent);
+      width: var(--pct);
+      transition: width 1.5s ease;
+    }
+
+    .skill-name {
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    .skill-name span {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.65rem;
+      color: var(--magenta);
+      display: block;
+    }
+
+    .skill-pct {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      color: var(--cyan);
+    }
+
+    .cert-count {
+      margin-top: 32px;
+      padding: 20px;
+      border: 1px solid rgba(255,215,0,0.2);
+      background: rgba(255,215,0,0.03);
+      display: inline-flex;
+      align-items: center; gap: 16px;
+    }
+
+    .cert-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    }
+
+    .cert-label { font-size: 0.75rem; color: var(--text-dim); }
+    .cert-label-mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.75rem;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 20px; height: 20px;
+      background: var(--border-color, var(--cyan));
+      opacity: 0.3;
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+    }
+
+    .project-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,245,255,0.1);
+    }
+
+    .project-card.flagship {
+      grid-column: span 2;
+      border-color: rgba(255,215,0,0.3);
+      --border-color: var(--gold);
+    }
+
+    .project-card.flagship:hover { border-color: var(--gold); }
+
+    .project-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    .project-tag {
+      font-size: 0.55rem;
+      letter-spacing: 3px;
+      color: var(--magenta);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .project-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .project-name-mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.85rem;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .project-desc.mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.82rem;
+    }
+
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      padding: 3px 10px;
+      border: 1px solid rgba(0,245,255,0.2);
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .tag.kotlin { border-color: rgba(128,0,255,0.4); color: #a855f7; }
+    .tag.compose { border-color: rgba(0,245,255,0.3); color: var(--cyan); }
+    .tag.firebase { border-color: rgba(255,165,0,0.3); color: orange; }
+    .tag.ai { border-color: rgba(57,255,20,0.3); color: var(--green); }
+    .tag.cicd { border-color: rgba(255,215,0,0.3); color: var(--gold); }
+
+    /* ─── ACCOUNTS ─── */
+    .accounts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .account-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+      text-decoration: none;
+      display: block;
+    }
+
+    .account-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+    }
+
+    .account-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      background: var(--bg-panel);
+    }
+
+    .account-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      color: var(--cyan);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .account-role {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+    }
+
+    .account-role.mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.65rem;
+      color: var(--magenta);
+    }
+
+    /* ─── CONTACT ─── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    .contact-info { }
+
+    .contact-item {
+      display: flex; gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .contact-value {
+      font-size: 0.85rem;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .contact-value.mm {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 0.85rem;
+      color: var(--cyan);
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+    .form-group { position: relative; }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--cyan); }
+
+    .form-group label {
+      position: absolute;
+      top: -8px; left: 12px;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      background: var(--bg-card);
+      padding: 0 4px;
+      color: var(--text-dim);
+    }
+
+    /* ─── EMAIL ROWS ─── */
+    .email-row {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+      overflow: hidden;
+    }
+    .email-row:hover {
+      border-color: var(--cyan);
+      background: rgba(0,245,255,0.04);
+    }
+    .email-icon { font-size: 1rem; flex-shrink: 0; }
+    .email-domain-tag {
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      color: var(--magenta);
+      text-transform: uppercase;
+      flex-shrink: 0;
+      min-width: 80px;
+    }
+    .email-addr {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      transition: color 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .email-row:hover .email-addr { color: var(--cyan); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative; z-index: 10;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 40px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+      font-size: 1.1rem;
+      color: var(--cyan);
+      text-shadow: var(--glow-cyan);
+    }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    .social-links {
+      display: flex; gap: 16px;
+    }
+
+    .social-links a {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* ─── DECORATIVE CORNER BRACKETS ─── */
+    .bracket-box {
+      position: relative;
+      padding: 2px;
+    }
+    .bracket-box::before,
+    .bracket-box::after {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+    }
+    .bracket-box::before {
+      top: 0; left: 0;
+      border-top: 2px solid var(--cyan);
+      border-left: 2px solid var(--cyan);
+    }
+    .bracket-box::after {
+      bottom: 0; right: 0;
+      border-bottom: 2px solid var(--cyan);
+      border-right: 2px solid var(--cyan);
+    }
+
+    /* ─── DIVIDER ─── */
+    .cyber-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent);
+      opacity: 0.3;
+      margin: 0;
+    }
+
+    /* ─── MOBILE MENU ─── */
+    .menu-toggle {
+      display: none;
+      flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px;
+    }
+    .menu-toggle span {
+      width: 24px; height: 2px;
+      background: var(--cyan);
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px; left: 80px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      animation: fadeInUp 1s 1s ease both;
+    }
+    .scroll-line {
+      width: 40px; height: 1px;
+      background: var(--cyan);
+      animation: scroll-pulse 2s infinite;
+    }
+    @keyframes scroll-pulse {
+      0%,100% { width: 40px; opacity: 1; }
+      50% { width: 20px; opacity: 0.5; }
+    }
+
+    /* ─── SECTION BG ACCENT ─── */
+    .section-accent {
+      background: linear-gradient(180deg, var(--bg-void) 0%, var(--bg-card) 50%, var(--bg-void) 100%);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      nav ul { display: none; }
+      nav ul.open { display: flex; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; background: rgba(2,4,8,0.98); padding: 20px; gap: 16px; border-bottom: 1px solid var(--border); }
+      .menu-toggle { display: flex; }
+      section.page-section { padding: 60px 20px; }
+      .hero-content { padding: 0 20px; }
+      .hero-glyph { display: none; }
+      .hero-stats { right: 20px; bottom: 80px; gap: 20px; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .project-card.flagship { grid-column: span 1; }
+      .projects-grid { grid-template-columns: 1fr; }
+      footer { padding: 30px 20px; flex-direction: column; text-align: center; }
+      .scroll-indicator { left: 20px; }
+    }
+
+    /* ─── NEON CORNER ─── */
+    .neon-corner {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* glitch effect */
+    @keyframes glitch {
+      0% { clip-path: inset(40% 0 60% 0); transform: translate(-4px); }
+      20% { clip-path: inset(20% 0 75% 0); transform: translate(4px); }
+      40% { clip-path: inset(70% 0 10% 0); transform: translate(-4px); }
+      60% { clip-path: inset(10% 0 80% 0); transform: translate(4px); }
+      80% { clip-path: inset(80% 0 5% 0); transform: translate(-4px); }
+      100% { clip-path: inset(40% 0 60% 0); transform: translate(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Matrix canvas -->
+<canvas id="matrix-bg"></canvas>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<header>
+  <a class="brand" href="#">
+    MKA<span>မိုးကျော်အောင်</span>
+  </a>
+
+  <nav>
+    <div class="menu-toggle" id="menuToggle">
+      <span></span><span></span><span></span>
+    </div>
+    <ul id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#accounts">GitHub</a></li>
+      <li><a href="#webapps">Web Apps</a></li>
+      <li><a href="#emails">Emails</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    <span>ONLINE · MICROSOFT</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-grid"></div>
+
+  <div class="hero-glyph">မိုးကျော်အောင်</div>
+
+  <div class="hero-content">
+    <div class="hero-tag">// SENIOR ANDROID DEVELOPER · TACHILEIK, MYANMAR</div>
+
+    <div class="hero-name-mm">မိုးကျော်အောင်</div>
+    <div class="hero-name-en">MOE KYAW AUNG</div>
+
+    <div class="hero-role">
+      <strong>Senior Android Developer</strong> at Microsoft &nbsp;·&nbsp;
+      Kotlin &nbsp;·&nbsp; Jetpack Compose &nbsp;·&nbsp; AI/ML
+    </div>
+
+    <div class="hero-desc">
+      Android development ကို passion နဲ့ လုပ်ကိုင်သူ — cyberpunk aesthetic ကို code ထဲ ထည့်ပြီး<br>
+      Myanmar digital future ကို တည်ဆောက်နေသူ ✦
+    </div>
+
+    <div class="hero-cta">
+      <a class="btn-cyber" href="#projects">VIEW PROJECTS</a>
+      <a class="btn-cyber mag" href="#contact">CONTACT ME</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">40+</div>
+      <div class="stat-label">Certifications</div>
+      <div class="stat-label-mm">လက်မှတ်များ</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">14+</div>
+      <div class="stat-label">GitHub Accounts</div>
+      <div class="stat-label-mm">GitHub</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Passion</div>
+      <div class="stat-label-mm">စိတ်အားထက်သန်မှု</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    SCROLL DOWN
+  </div>
+</div>
+
+<div class="cyber-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════ -->
+<section class="page-section" id="about">
+  <div class="section-header">
+    <div class="section-tag">// 01. ABOUT</div>
+    <div class="section-title">WHO AM I</div>
+    <div class="section-title-mm">ကျွန်တော်ကဘယ်လိုသူလဲ</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        Senior Android Developer at <strong style="color:var(--cyan)">Microsoft</strong>, based in Tachileik, Myanmar.
+        Specializing in Kotlin, Jetpack Compose, Clean Architecture, and AI-powered mobile applications.
+      </p>
+      <p class="mm">
+        Microsoft တွင် Senior Android Developer အဖြစ် လုပ်ကိုင်နေပြီး Kotlin၊ Jetpack Compose၊
+        Firebase နှင့် AI/ML integration တွင် အထူးကျွမ်းကျင်သူဖြစ်သည်။ Google Developers Launchpad မှ
+        လက်မှတ် ၄၀ ကျော် ရရှိထားသည်။
+      </p>
+      <p>
+        Beyond mobile development — ethical hacking, cybersecurity, computer vision, and web technologies.
+        Building Myanmar's digital presence through thoughtful design and clean code.
+      </p>
+
+      <div class="cert-count bracket-box">
+        <div class="cert-num">40+</div>
+        <div>
+          <div class="cert-label">Google Developers Launchpad</div>
+          <div class="cert-label-mm">Google Certifications</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="skills-grid">
+        <div class="skill-bar" style="--pct:95%">
+          <div class="skill-name">Kotlin <span>ကိုတ်လင်</span></div>
+          <div class="skill-pct">95%</div>
+        </div>
+        <div class="skill-bar" style="--pct:92%">
+          <div class="skill-name">Jetpack Compose <span>Compose UI</span></div>
+          <div class="skill-pct">92%</div>
+        </div>
+        <div class="skill-bar" style="--pct:88%">
+          <div class="skill-name">Firebase <span>ဖိုင်ယာဘေ့စ်</span></div>
+          <div class="skill-pct">88%</div>
+        </div>
+        <div class="skill-bar" style="--pct:85%">
+          <div class="skill-name">MVVM / Clean Arch <span>Architecture</span></div>
+          <div class="skill-pct">85%</div>
+        </div>
+        <div class="skill-bar" style="--pct:80%">
+          <div class="skill-name">REST APIs <span>API Integration</span></div>
+          <div class="skill-pct">80%</div>
+        </div>
+        <div class="skill-bar" style="--pct:75%">
+          <div class="skill-name">Cybersecurity <span>လုံခြုံရေး</span></div>
+          <div class="skill-pct">75%</div>
+        </div>
+        <div class="skill-bar" style="--pct:70%">
+          <div class="skill-name">AI / ML <span>ဉာဏ်ရည်တု</span></div>
+          <div class="skill-pct">70%</div>
+        </div>
+        <div class="skill-bar" style="--pct:78%">
+          <div class="skill-name">Web Dev <span>ဝဘ်ဖွံ့ဖြိုး</span></div>
+          <div class="skill-pct">78%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cyber-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     PROJECTS
+═══════════════════════════════════════════ -->
+<section class="page-section section-accent" id="projects">
+  <div class="section-header">
+    <div class="section-tag">// 02. PROJECTS</div>
+    <div class="section-title">SELECTED WORK</div>
+    <div class="section-title-mm">ပရောဂျက်များ</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- FLAGSHIP -->
+    <div class="project-card flagship">
+      <div class="project-icon">🌐</div>
+      <div class="project-tag">// FLAGSHIP · ANDROID APP</div>
+      <div class="project-name">MoekyawTranslator</div>
+      <div class="project-name-mm">မိုးကျော်ဘာသာပြန်</div>
+      <div class="project-desc">
+        Claude API powered Android translation app supporting 8 languages including Myanmar, Chinese, Thai, Japanese, Korean, Hindi, and English. Built with Kotlin + Jetpack Compose.
+      </div>
+      <div class="project-desc mm">
+        Claude API ကို အသုံးပြု၍ တည်ဆောက်ထားသော Android translation app — မြန်မာ၊ တရုတ်၊ ထိုင်း၊ ဂျပန်နှင့် အခြား ၈ ဘာသာ ပံ့ပိုးသည်။
+      </div>
+      <div class="project-tags">
+        <span class="tag kotlin">Kotlin</span>
+        <span class="tag compose">Jetpack Compose</span>
+        <span class="tag ai">Claude API</span>
+        <span class="tag firebase">Firebase</span>
+        <span class="tag">MVVM</span>
+        <span class="tag">8 Languages</span>
+      </div>
+    </div>
+
+    <!-- Yahtzee -->
+    <div class="project-card">
+      <div class="project-icon">🎲</div>
+      <div class="project-tag">// ANDROID GAME</div>
+      <div class="project-name">Yahtzee</div>
+      <div class="project-name-mm">ဂိမ်း · Cyberpunk</div>
+      <div class="project-desc">Complete Yahtzee game for Android with cyberpunk dark theme. Full Jetpack Compose implementation with smooth animations.</div>
+      <div class="project-tags">
+        <span class="tag kotlin">Kotlin</span>
+        <span class="tag compose">Jetpack Compose</span>
+        <span class="tag">Cyberpunk Theme</span>
+      </div>
+    </div>
+
+    <!-- CI/CD -->
+    <div class="project-card">
+      <div class="project-icon">⚙️</div>
+      <div class="project-tag">// DEVOPS</div>
+      <div class="project-name">Android CI/CD Suite</div>
+      <div class="project-name-mm">CI/CD Pipeline Suite</div>
+      <div class="project-desc">5 GitHub Actions workflows: build, lint, instrumented tests, release signing, and dependency checks for Android projects.</div>
+      <div class="project-tags">
+        <span class="tag cicd">GitHub Actions</span>
+        <span class="tag">5 Workflows</span>
+        <span class="tag kotlin">Android</span>
+      </div>
+    </div>
+
+    <!-- Design System -->
+    <div class="project-card">
+      <div class="project-icon">🎨</div>
+      <div class="project-tag">// UI LIBRARY</div>
+      <div class="project-name">Compose Design System</div>
+      <div class="project-name-mm">ဒီဇိုင်း System</div>
+      <div class="project-desc">100+ Jetpack Compose components. Production-ready design system with cyberpunk aesthetic tokens.</div>
+      <div class="project-tags">
+        <span class="tag compose">Jetpack Compose</span>
+        <span class="tag">100+ Components</span>
+        <span class="tag kotlin">Kotlin</span>
+      </div>
+    </div>
+
+    <!-- Acode Plugin -->
+    <div class="project-card">
+      <div class="project-icon">🔌</div>
+      <div class="project-tag">// ACODE PLUGIN</div>
+      <div class="project-name">Env Highlighter</div>
+      <div class="project-name-mm">acode.devx.env · v2.0.42</div>
+      <div class="project-desc">Published Acode editor plugin with 13 themes. Plugin ID: acode.devx.env. Available on Acode plugin marketplace.</div>
+      <div class="project-tags">
+        <span class="tag">13 Themes</span>
+        <span class="tag ai">Published</span>
+        <span class="tag">Acode Editor</span>
+      </div>
+    </div>
+
+    <!-- Thailand Hub -->
+    <div class="project-card">
+      <div class="project-icon">🇹🇭</div>
+      <div class="project-tag">// COMMUNITY</div>
+      <div class="project-name">Thailand Resources Hub</div>
+      <div class="project-name-mm">ထိုင်း မြန်မာ Community</div>
+      <div class="project-desc">Community-driven GitHub repository — resources and guides for Myanmar nationals living in Thailand.</div>
+      <div class="project-tags">
+        <span class="tag">Community</span>
+        <span class="tag firebase">GitHub</span>
+        <span class="tag">Myanmar + Thai</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="cyber-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     GITHUB ACCOUNTS
+═══════════════════════════════════════════ -->
+<section class="page-section" id="accounts">
+  <div class="section-header">
+    <div class="section-tag">// 03. GITHUB PRESENCE</div>
+    <div class="section-title">MULTI-PERSONA STRATEGY</div>
+    <div class="section-title-mm">GitHub အကောင့်များ</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="accounts-grid">
+    <a class="account-card" href="https://moekyawaung-mk.github.io/" target="_blank">
+      <div class="account-avatar">⚡</div>
+      <div class="account-name">MK · Main</div>
+      <div class="account-role">moekyawaung-mk</div>
+      <div class="account-role mm">ပင်မ Portfolio</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-microsoft.github.io/" target="_blank">
+      <div class="account-avatar">💻</div>
+      <div class="account-name">MK · Microsoft</div>
+      <div class="account-role">moekyawaung-microsoft</div>
+      <div class="account-role mm">Enterprise Persona</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-bangkok.github.io/" target="_blank">
+      <div class="account-avatar">🌸</div>
+      <div class="account-name">MK · Bangkok</div>
+      <div class="account-role">moekyawaung-bangkok</div>
+      <div class="account-role mm">ထိုင်းနိုင်ငံ</div>
+    </a>
+    <a class="account-card" href="https://moekyawaungvivov30pro-design.github.io/Moe-Kyaw-Aung-Portfolio/" target="_blank">
+      <div class="account-avatar">🎨</div>
+      <div class="account-name">MK · Design</div>
+      <div class="account-role">vivov30pro-design</div>
+      <div class="account-role mm">ဒီဇိုင်း Portfolio</div>
+    </a>
+    <a class="account-card" href="https://moekyawaungmka2026-cyber.github.io/" target="_blank">
+      <div class="account-avatar">🔒</div>
+      <div class="account-name">MK · Cyber</div>
+      <div class="account-role">mka2026-cyber</div>
+      <div class="account-role mm">Cybersecurity</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-dev-mm.github.io/" target="_blank">
+      <div class="account-avatar">🇲🇲</div>
+      <div class="account-name">MK · Dev MM</div>
+      <div class="account-role">moekyawaung-dev-mm</div>
+      <div class="account-role mm">Myanmar Developer</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-developer.github.io/" target="_blank">
+      <div class="account-avatar">🔧</div>
+      <div class="account-name">MK · Developer</div>
+      <div class="account-role">moekyawaung-developer</div>
+      <div class="account-role mm">Developer Portfolio</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-graduate.github.io/" target="_blank">
+      <div class="account-avatar">🎓</div>
+      <div class="account-name">MK · Graduate</div>
+      <div class="account-role">moekyawaung-graduate</div>
+      <div class="account-role mm">ဘွဲ့ရ</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-china.github.io/" target="_blank">
+      <div class="account-avatar">🇨🇳</div>
+      <div class="account-name">MK · China</div>
+      <div class="account-role">moekyawaung-china</div>
+      <div class="account-role mm">China Focus</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-micro.github.io/" target="_blank">
+      <div class="account-avatar">🔬</div>
+      <div class="account-name">MK · Micro</div>
+      <div class="account-role">moekyawaung-micro</div>
+      <div class="account-role mm">Micro Projects</div>
+    </a>
+    <a class="account-card" href="https://moekyawaung-linux.github.io/Wiki/" target="_blank">
+      <div class="account-avatar">🐧</div>
+      <div class="account-name">MK · Linux</div>
+      <div class="account-role">moekyawaung-linux</div>
+      <div class="account-role mm">Linux Wiki</div>
+    </a>
+    <a class="account-card" href="https://moekyaw-developer.github.io/" target="_blank">
+      <div class="account-avatar">👨‍💻</div>
+      <div class="account-name">MoeKyaw · Dev</div>
+      <div class="account-role">moekyaw-developer</div>
+      <div class="account-role mm">Developer Site</div>
+    </a>
+    <a class="account-card" href="https://moekyawaungmka2032-boop.github.io/" target="_blank">
+      <div class="account-avatar">🚀</div>
+      <div class="account-name">MK · 2032</div>
+      <div class="account-role">mka2032-boop</div>
+      <div class="account-role mm">Future Projects</div>
+    </a>
+    <a class="account-card" href="https://github.com/moekyawaung-tech" target="_blank">
+      <div class="account-avatar">⚙️</div>
+      <div class="account-name">MK · Tech</div>
+      <div class="account-role">moekyawaung-tech</div>
+      <div class="account-role mm">Tech Projects</div>
+    </a>
+  </div>
+</section>
+
+<div class="cyber-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════ -->
+<section class="page-section section-accent" id="contact">
+  <div class="section-header">
+    <div class="section-tag">// 05. CONTACT</div>
+    <div class="section-title">GET IN TOUCH</div>
+    <div class="section-title-mm">ဆက်သွယ်ရန်</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa fa-map-marker-alt"></i></div>
+        <div>
+          <div class="contact-label">LOCATION</div>
+          <div class="contact-value mm">တာချီလိတ်မြို့၊ မြန်မာနိုင်ငံ</div>
+          <div class="contact-value">Tachileik, Myanmar</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa fa-briefcase"></i></div>
+        <div>
+          <div class="contact-label">COMPANY</div>
+          <div class="contact-value">Microsoft</div>
+          <div class="contact-value mm">Senior Android Developer</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fab fa-telegram"></i></div>
+        <div>
+          <div class="contact-label">TELEGRAM</div>
+          <div class="contact-value"><a href="https://t.me/Moekyawaung" target="_blank" style="color:var(--cyan);text-decoration:none">@Moekyawaung</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fab fa-github"></i></div>
+        <div>
+          <div class="contact-label">GITHUB</div>
+          <div class="contact-value"><a href="https://moekyawaung-mk.github.io/" target="_blank" style="color:var(--cyan);text-decoration:none">moekyawaung-mk.github.io</a></div>
+          <div class="contact-value mm">14+ accounts · Multiple personas</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa fa-code"></i></div>
+        <div>
+          <div class="contact-label">STACK</div>
+          <div class="contact-value">Kotlin · Compose · Firebase · AI/ML</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <div class="form-group">
+        <label>NAME · နာမည်</label>
+        <input type="text" placeholder="Your name / သင့်နာမည်">
+      </div>
+      <div class="form-group">
+        <label>EMAIL · အီးမေးလ်</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>MESSAGE · မက်ဆေ့ချ်</label>
+        <textarea rows="5" placeholder="Your message / သင့်မက်ဆေ့ချ်..."></textarea>
+      </div>
+      <button class="btn-cyber" style="width:fit-content">SEND MESSAGE</button>
+    </div>
+  </div>
+</section>
+
+<div class="cyber-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     WEB APPS & LIVE SITES
+═══════════════════════════════════════════ -->
+<section class="page-section" id="webapps">
+  <div class="section-header">
+    <div class="section-tag">// 04. WEB APPS & LIVE SITES</div>
+    <div class="section-title">LOVABLE · REPLIT · LIVE</div>
+    <div class="section-title-mm">တည်ဆောက်ထားသော ဆိုဒ်များ</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr))">
+
+    <a class="project-card" href="https://moe-kyaw-aung.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">🌟</div>
+      <div class="project-tag">// LOVABLE · MAIN</div>
+      <div class="project-name">Moe Kyaw Aung</div>
+      <div class="project-name-mm">moe-kyaw-aung.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://happy-cv-creator.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">📄</div>
+      <div class="project-tag">// LOVABLE · CV TOOL</div>
+      <div class="project-name">Happy CV Creator</div>
+      <div class="project-name-mm">happy-cv-creator.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://the-cv-palette.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">🎨</div>
+      <div class="project-tag">// LOVABLE · CV DESIGN</div>
+      <div class="project-name">The CV Palette</div>
+      <div class="project-name-mm">the-cv-palette.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://moekyawaung-dev.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">⚡</div>
+      <div class="project-tag">// LOVABLE · DEV</div>
+      <div class="project-name">MKA Dev</div>
+      <div class="project-name-mm">moekyawaung-dev.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://dev-moekyawaung.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">🔧</div>
+      <div class="project-tag">// LOVABLE · DEV II</div>
+      <div class="project-name">Dev MoeKyawAung</div>
+      <div class="project-name-mm">dev-moekyawaung.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://dev-moekyaw.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">💻</div>
+      <div class="project-tag">// LOVABLE · DEV III</div>
+      <div class="project-name">Dev MoeKyaw</div>
+      <div class="project-name-mm">dev-moekyaw.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://moekyaw-url.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">🔗</div>
+      <div class="project-tag">// LOVABLE · URL</div>
+      <div class="project-name">MoeKyaw URL</div>
+      <div class="project-name-mm">moekyaw-url.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://moekyawaungmybio.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">👤</div>
+      <div class="project-tag">// LOVABLE · BIO</div>
+      <div class="project-name">My Bio</div>
+      <div class="project-name-mm">moekyawaungmybio.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://moekyawaungmka.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">🏷️</div>
+      <div class="project-tag">// LOVABLE · MKA</div>
+      <div class="project-name">MKA Site</div>
+      <div class="project-name-mm">moekyawaungmka.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://m-moekyaw.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">📱</div>
+      <div class="project-tag">// LOVABLE</div>
+      <div class="project-name">M · MoeKyaw</div>
+      <div class="project-name-mm">m-moekyaw.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://moekyaw.lovable.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">✨</div>
+      <div class="project-tag">// LOVABLE</div>
+      <div class="project-name">MoeKyaw</div>
+      <div class="project-name-mm">moekyaw.lovable.app</div>
+    </a>
+
+    <a class="project-card" href="https://bio-linker--moekyawaung1372.replit.app" target="_blank" style="text-decoration:none">
+      <div class="project-icon">🔄</div>
+      <div class="project-tag">// REPLIT · BIO LINKER</div>
+      <div class="project-name">Bio Linker</div>
+      <div class="project-name-mm">Replit · moekyawaung1372</div>
+    </a>
+
+  </div>
+</section>
+
+<div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--magenta),transparent);opacity:0.3"></div>
+
+<!-- ═══════════════════════════════════════════
+     EMAIL ADDRESSES
+═══════════════════════════════════════════ -->
+<section class="page-section section-accent" id="emails">
+  <div class="section-header">
+    <div class="section-tag">// 06. EMAIL ADDRESSES</div>
+    <div class="section-title">REACH ME ANYWHERE</div>
+    <div class="section-title-mm">အီးမေးလ်လိပ်စာများ</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;">
+    <a href="mailto:moekyawaung@programmer.net" class="email-row"><span class="email-icon">💻</span><span class="email-domain-tag">programmer</span><span class="email-addr">moekyawaung@programmer.net</span></a>
+    <a href="mailto:moekyawaung@technologist.com" class="email-row"><span class="email-icon">⚙️</span><span class="email-domain-tag">technologist</span><span class="email-addr">moekyawaung@technologist.com</span></a>
+    <a href="mailto:moekyawaung@techie.com" class="email-row"><span class="email-icon">🔬</span><span class="email-domain-tag">techie</span><span class="email-addr">moekyawaung@techie.com</span></a>
+    <a href="mailto:moekyawaung@engineer.com" class="email-row"><span class="email-icon">🛠️</span><span class="email-domain-tag">engineer</span><span class="email-addr">moekyawaung@engineer.com</span></a>
+    <a href="mailto:moekyawaung@hackermail.com" class="email-row"><span class="email-icon">🔒</span><span class="email-domain-tag">hacker</span><span class="email-addr">moekyawaung@hackermail.com</span></a>
+    <a href="mailto:moekyawaung@cybergal.com" class="email-row"><span class="email-icon">🌐</span><span class="email-domain-tag">cyber</span><span class="email-addr">moekyawaung@cybergal.com</span></a>
+    <a href="mailto:moekyawaung@linuxmail.org" class="email-row"><span class="email-icon">🐧</span><span class="email-domain-tag">linux</span><span class="email-addr">moekyawaung@linuxmail.org</span></a>
+    <a href="mailto:moekyawaung@graphic-designer.com" class="email-row"><span class="email-icon">🎨</span><span class="email-domain-tag">designer</span><span class="email-addr">moekyawaung@graphic-designer.com</span></a>
+    <a href="mailto:moekyawaung@webname.com" class="email-row"><span class="email-icon">🌍</span><span class="email-domain-tag">web</span><span class="email-addr">moekyawaung@webname.com</span></a>
+    <a href="mailto:moekyawaung@graduate.org" class="email-row"><span class="email-icon">🎓</span><span class="email-domain-tag">graduate</span><span class="email-addr">moekyawaung@graduate.org</span></a>
+    <a href="mailto:moekyawaung@collector.org" class="email-row"><span class="email-icon">📦</span><span class="email-domain-tag">collector</span><span class="email-addr">moekyawaung@collector.org</span></a>
+    <a href="mailto:moekyawaung@contractor.net" class="email-row"><span class="email-icon">📋</span><span class="email-domain-tag">contractor</span><span class="email-addr">moekyawaung@contractor.net</span></a>
+    <a href="mailto:moekyawaung@publicist.com" class="email-row"><span class="email-icon">📢</span><span class="email-domain-tag">publicist</span><span class="email-addr">moekyawaung@publicist.com</span></a>
+    <a href="mailto:moekyawaung@socialogist.com" class="email-row"><span class="email-icon">🤝</span><span class="email-domain-tag">sociologist</span><span class="email-addr">moekyawaung@socialogist.com</span></a>
+    <a href="mailto:moekyawaung@secretary.net" class="email-row"><span class="email-icon">🗂️</span><span class="email-domain-tag">secretary</span><span class="email-addr">moekyawaung@secretary.net</span></a>
+    <a href="mailto:moekyawaung@asia.com" class="email-row"><span class="email-icon">🌏</span><span class="email-domain-tag">asia</span><span class="email-addr">moekyawaung@asia.com</span></a>
+    <a href="mailto:moekyawaung@usa.com" class="email-row"><span class="email-icon">🇺🇸</span><span class="email-domain-tag">usa</span><span class="email-addr">moekyawaung@usa.com</span></a>
+    <a href="mailto:moekyawaung@europe.com" class="email-row"><span class="email-icon">🇪🇺</span><span class="email-domain-tag">europe</span><span class="email-addr">moekyawaung@europe.com</span></a>
+    <a href="mailto:moekyawaung@mail.com" class="email-row"><span class="email-icon">✉️</span><span class="email-domain-tag">mail</span><span class="email-addr">moekyawaung@mail.com</span></a>
+    <a href="mailto:moekyawaung@iname.com" class="email-row"><span class="email-icon">🏷️</span><span class="email-domain-tag">iname</span><span class="email-addr">moekyawaung@iname.com</span></a>
+  </div>
+
+  <div style="margin-top:24px;font-size:0.65rem;color:var(--text-dim);letter-spacing:2px">
+    TOTAL &nbsp;<span style="color:var(--cyan);font-family:'Orbitron',monospace;font-size:1rem">20</span>&nbsp; EMAIL ADDRESSES &nbsp;·&nbsp;
+    <span style="font-family:'Noto Sans Myanmar',sans-serif;color:var(--magenta)">အီးမေးလ် ၂၀ ခု</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div>
+    <div class="footer-brand">မိုးကျော်အောင် ✦</div>
+    <div class="footer-copy">© 2025 · Senior Android Developer · Microsoft · Tachileik, Myanmar</div>
+    <div class="footer-copy" style="font-family:'Noto Sans Myanmar',sans-serif; margin-top:4px; color:var(--text-dim)">
+      Template: Tera v2.5 · Customized by မိုးကျော်အောင်
+    </div>
+  </div>
+
+  <div class="social-links">
+    <a href="https://github.com/Moekyawaung" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    <a href="https://gitlab.com/Moekyawaung" target="_blank" title="GitLab"><i class="fab fa-gitlab"></i></a>
+    <a href="https://www.linkedin.com/in/moe-kyaw-aung-2653093a1" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    <a href="https://t.me/Moekyawaung" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+    <a href="https://moekyawaung.slack.com/" target="_blank" title="Slack"><i class="fab fa-slack"></i></a>
+  </div>
+
+  <div class="neon-corner">
+    BUILD WITH ♥ IN MYANMAR &nbsp;·&nbsp; CYBERPUNK EDITION
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════ -->
+<script>
+/* ── Matrix Rain ── */
+(function(){
+  const canvas = document.getElementById('matrix-bg');
+  const ctx = canvas.getContext('2d');
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ကခဂဃင';
+  const cols = Math.floor(canvas.width / 18);
+  const drops = Array(cols).fill(1);
+
+  function draw(){
+    ctx.fillStyle = 'rgba(2,4,8,0.05)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#00f5ff';
+    ctx.font = '14px Share Tech Mono, monospace';
+    drops.forEach((y, i)=>{
+      const c = chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(c, i*18, y*18);
+      if(y*18 > canvas.height && Math.random() > 0.975) drops[i]=0;
+      drops[i]++;
+    });
+  }
+  setInterval(draw, 50);
+})();
+
+/* ── Mobile Nav ── */
+document.getElementById('menuToggle').addEventListener('click', function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ── Skill Bar Animation on scroll ── */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-bar').forEach(b=>{
+        b.style.setProperty('--pct', b.style.getPropertyValue('--pct'));
+      });
+    }
+  });
+},{threshold:0.3});
+const aboutSection = document.getElementById('about');
+if(aboutSection) observer.observe(aboutSection);
+
+/* ── Smooth scroll for nav ── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const target = document.querySelector(a.getAttribute('href'));
+    if(target){
+      e.preventDefault();
+      target.scrollIntoView({behavior:'smooth'});
+      document.getElementById('navLinks').classList.remove('open');
+    }
+  });
+});
+
+/* ── Glitch on hero name hover ── */
+const heroName = document.querySelector('.hero-name-mm');
+if(heroName){
+  heroName.addEventListener('mouseenter',()=>{
+    heroName.style.animation = 'glitch 0.3s steps(1) 3';
+    setTimeout(()=>{ heroName.style.animation=''; },900);
+  });
+}
+</script>
+
+</body>
+</html>
