@@ -1,763 +1,616 @@
-# Baby Care Tracker - Pro Max Edition 🚀
-## Advanced Features Documentation
+<div align="center">
+
+<!-- HEADER BANNER -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,14,16,18,20&height=220&section=header&text=Moe%20Kyaw%20Aung&fontSize=68&fontColor=fff&fontAlignY=38&desc=Portfolio%20V5%20%E2%80%94%20Android%20Senior%20Developer&descAlignY=58&descSize=22&animation=fadeIn" alt="Header Banner" width="100%"/>
+
+<!-- PROFILE AVATAR -->
+<img src="https://0.gravatar.com/avatar/a2dae9a29fbf7c72552047efc744be54a018938aacd9009e7500f93d72eb0f2e?size=160" width="130" alt="Moe Kyaw Aung"/>
+
+<h1>
+  <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=28&pause=1000&color=9B8EC4&center=true&vCenter=true&width=600&lines=Android+Senior+Developer;Full+Stack+Engineer;Kotlin+%7C+Jetpack+Compose+%7C+Firebase;Clean+Architecture+Specialist;Tachileik%2C+Myanmar" alt="Typing SVG"/>
+</h1>
+
+<p>
+  <img src="https://img.shields.io/badge/Portfolio-V5.0.0-9b8ec4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Version"/>
+  <img src="https://img.shields.io/badge/Status-Live-4ade80?style=for-the-badge&logo=vercel&logoColor=white" alt="Status"/>
+  <img src="https://img.shields.io/badge/License-MIT-c084fc?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/badge/Built_With-HTML5-e44d26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
+  <img src="https://img.shields.io/badge/Styled_With-Tailwind_CSS-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind"/>
+</p>
+
+<p>
+  <img src="https://img.shields.io/github/stars/Dev-moe-kyawaung/Moe-Kyaw-Aung-portfolio-V5?style=for-the-badge&logo=github&color=9b8ec4" alt="Stars"/>
+  <img src="https://img.shields.io/github/forks/Dev-moe-kyawaung/Moe-Kyaw-Aung-portfolio-V5?style=for-the-badge&logo=github&color=7c6daa" alt="Forks"/>
+  <img src="https://img.shields.io/github/issues/Dev-moe-kyawaung/Moe-Kyaw-Aung-portfolio-V5?style=for-the-badge&logo=github&color=c084fc" alt="Issues"/>
+  <img src="https://img.shields.io/github/last-commit/Dev-moe-kyawaung/Moe-Kyaw-Aung-portfolio-V5?style=for-the-badge&logo=github&color=818cf8" alt="Last Commit"/>
+</p>
+
+<a href="https://dev-moe-kyawaung.github.io/Moe-Kyaw-Aung-portfolio-V5" target="_blank">
+  <img src="https://img.shields.io/badge/🚀_View_Live_Demo-9b8ec4?style=for-the-badge" alt="Live Demo" height="38"/>
+</a>
+&nbsp;
+<a href="https://gravatar.com/moekyawaung2026" target="_blank">
+  <img src="https://img.shields.io/badge/👤_Gravatar_Profile-c084fc?style=for-the-badge" alt="Gravatar" height="38"/>
+</a>
+&nbsp;
+<a href="https://github.com/Dev-moe-kyawaung" target="_blank">
+  <img src="https://img.shields.io/badge/🐙_GitHub_Profile-24292e?style=for-the-badge" alt="GitHub" height="38"/>
+</a>
+
+<br/><br/>
+
+</div>
 
 ---
 
-## 📋 Overview
+## 📋 Table of Contents
 
-This document covers all **Pro Max** features including:
-- 🔔 Push Notifications with FCM
-- 🧠 AI Health Insights with Gemini
-- 👨‍👩‍👧 Multi-Child Support
-- 🔐 Biometric Authentication
-- ⌚ Wearable App Companion
-- 📤 Offline Sync & Data Queue
-- 📊 Predictive Analytics
-- 🏥 Health Report Generation
+<details>
+<summary><b>Click to expand full contents</b></summary>
 
----
+- [✨ Overview](#-overview)
+- [🎨 Design System](#-design-system)
+- [🏗️ Architecture](#️-architecture)
+- [⚡ Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🚀 Quick Start](#-quick-start)
+- [📁 File Structure](#-file-structure)
+- [🎯 Sections Breakdown](#-sections-breakdown)
+- [📜 Certificates 49+](#-certificates-49)
+- [🔗 Social Links](#-social-links)
+- [📦 GitHub Actions CI/CD](#-github-actions-cicd)
+- [⚙️ Customization](#️-customization)
+- [🌐 Browser Support](#-browser-support)
+- [♿ Accessibility](#-accessibility)
+- [📈 Performance](#-performance)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [📞 Contact](#-contact)
 
-## 🔔 Push Notifications (FCM)
-
-### Features
-- Smart feeding reminders based on patterns
-- Sleep schedule alerts
-- Health anomaly notifications
-- Milestone achievement reminders
-- Quiet hours support
-- Priority-based notification levels
-
-### Setup
-
-#### 1. Enable FCM in Firebase Console
-```
-Project Settings → Cloud Messaging → Copy Server Key
-```
-
-#### 2. Add Dependency
-```kotlin
-implementation("com.google.firebase:firebase-messaging:23.4.0")
-```
-
-#### 3. Create MessagingService
-```kotlin
-class BabyCareMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // Handle notifications
-    }
-
-    override fun onNewToken(token: String) {
-        // Send token to backend
-    }
-}
-```
-
-#### 4. AndroidManifest.xml
-```xml
-<service
-    android:name=".notifications.BabyCareMessagingService"
-    android:exported="false">
-    <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT" />
-    </intent-filter>
-</service>
-```
-
-### Usage
-
-#### Subscribe to Topics
-```kotlin
-val notificationManager = NotificationManager(context)
-
-// Subscribe to feeding reminders
-notificationManager.subscribeTopic("feeding_reminders")
-
-// Schedule feeding reminders every 3 hours
-notificationManager.scheduleFeedingReminders(intervalHours = 3)
-```
-
-#### Send Local Notifications
-```kotlin
-notificationManager.sendLocalNotification(
-    title = "🍼 Feeding Time",
-    message = "It's time to feed your baby",
-    type = NotificationType.FEEDING
-)
-```
-
-#### Notification Preferences
-```kotlin
-val prefs = NotificationPreferences(
-    feedingReminders = true,
-    sleepReminders = true,
-    diaperReminders = true,
-    temperatureAlerts = true,
-    healthAlerts = true,
-    feedingInterval = 3,
-    quietHoursStart = 22,
-    quietHoursEnd = 7
-)
-
-notificationManager.updateNotificationPreferences(prefs)
-```
-
-### Notification Types
-- `FEEDING`: Feeding time reminders
-- `SLEEP`: Sleep schedule alerts
-- `DIAPER`: Diaper change reminders
-- `TEMPERATURE`: Temperature monitoring alerts
-- `HEALTH`: Health anomaly warnings
-- `MILESTONE`: Milestone achievement notifications
-- `SYNC`: Data sync completion notifications
+</details>
 
 ---
 
-## 🧠 AI Health Insights
+## ✨ Overview
 
-### Powered by Google's Generative AI (Gemini)
+**Moe Kyaw Aung Portfolio V5** is a complete, production-ready **single-page portfolio website** crafted for a Senior Android Developer based in Tachileik, Myanmar. Built in a single HTML file with HTML5, CSS custom properties, and vanilla JavaScript — zero build tools, zero installation, opens immediately in any browser.
 
-#### Features
-- Automatic feeding pattern analysis
-- Sleep quality assessment
-- Temperature anomaly detection
-- Growth milestone tracking
-- Predictive next feeding time
-- Health risk scoring
-- Personalized recommendations
+> *"This is not just a portfolio. It's a technical statement — an open-source demonstration of frontend mastery, production discipline, and clean-code principles applied to web."*
 
-### Setup
+### 🌟 What Makes V5 Special
 
-#### 1. Get Gemini API Key
-```
-Google AI Studio → Create API Key
-```
-
-#### 2. Add Dependency
-```kotlin
-implementation("com.google.ai.client.generativeai:google-generativeai:0.1.1")
-```
-
-#### 3. Initialize Service
-```kotlin
-val apiKey = "your-gemini-api-key"
-val insightsService = AIInsightsService(apiKey, userId)
-```
-
-### Usage
-
-#### Generate Health Insights
-```kotlin
-val insights = insightsService.generateHealthInsightsFlow(entries)
-    .collect { insightList ->
-        insightList.forEach { insight ->
-            println("${insight.title}: ${insight.recommendation}")
-        }
-    }
-```
-
-#### Get Predictive Analytics
-```kotlin
-val predictive = insightsService.generatePredictiveAnalyticsFlow(entries)
-    .collect { analytics ->
-        println("Next feeding: ${analytics.nextFeedingTime}")
-        println("Health risk: ${analytics.healthRiskScore}")
-    }
-```
-
-#### Generate Daily Report
-```kotlin
-val report = insightsService.generateHealthReport(entries)
-println("""
-    Date: ${report.date}
-    Feeding Sessions: ${report.feeding.totalSessions}
-    Sleep Hours: ${report.sleep.totalHours}
-    Avg Temperature: ${report.health.averageTemperature}°C
-""")
-```
-
-### Insight Types
-
-| Type | Description | Use Case |
-|------|-------------|----------|
-| FEEDING_PATTERN | Analyzes feeding frequency and duration | Optimize feeding schedule |
-| SLEEP_PATTERN | Evaluates sleep duration and quality | Ensure adequate rest |
-| HEALTH_ALERT | Monitors temperature and vital signs | Detect health issues |
-| GROWTH_MILESTONE | Tracks developmental milestones | Monitor growth |
-| BEHAVIORAL | Analyzes behavioral patterns | Identify changes |
+| Feature | V5 |
+|---|---|
+| Design Language | Glasspunk — layered glass with vivid purples |
+| Architecture | Zero-dependency single HTML file |
+| Certificates | 49 real Programming Hub certs with lightbox |
+| Social Links | 16 verified platforms from Gravatar |
+| Interactive | Particle canvas, parallax, counter animations |
+| Accessibility | WCAG 2.1 AA compliant |
+| Performance | <2s load on 4G, 90+ Lighthouse score |
+| Theme | Dark & Light mode with localStorage persistence |
 
 ---
 
-## 👨‍👩‍👧 Multi-Child Support
+## 🎨 Design System
 
-### Features
-- Manage multiple children in single account
-- Switch between children instantly
-- Separate tracking for each child
-- Child profiles with medical history
-- Allergies and medical conditions tracking
-- Per-child statistics and reports
+### Color Palette
 
-### Data Model
+| Token | Light Mode | Dark Mode | Usage |
+|---|---|---|---|
+| `--primary` | `#9b8ec4` | `#b5a8d9` | Primary accent, nav active, bars |
+| `--secondary` | `#7c6daa` | `#9b8ec4` | Buttons, gradients |
+| `--accent` | `#c084fc` | `#d8b4fe` | Labels, highlights |
+| `--accent2` | `#818cf8` | `#a5b4fc` | Secondary highlights |
+| `--bg` | `#F5F3FF` | `#0d0a1c` | Page background |
 
-```kotlin
-data class Child(
-    val id: String,
-    val name: String,
-    val dateOfBirth: String,
-    val gender: String,
-    val bloodType: String,
-    val photoUrl: String,
-    val allergies: List<String>,
-    val medicalHistory: String,
-    val isActive: Boolean
-)
+### Typography
+
+| Font | Role | Weights |
+|---|---|---|
+| **Orbitron** | Headings, Logo, Numbers, Labels | 400–900 |
+| **Nunito** | Body text, Paragraphs, UI elements | 300–800 |
+
+---
+
+## 🏗️ Architecture
+
 ```
-
-### Usage
-
-#### Initialize Repository
-```kotlin
-val repository = ChildrenRepository(userId)
-```
-
-#### Add Child
-```kotlin
-val child = Child(
-    name = "Emma",
-    dateOfBirth = "2023-06-15",
-    gender = "Female",
-    bloodType = "O+"
-)
-
-val childId = repository.addChild(child)
-```
-
-#### Switch Current Child
-```kotlin
-repository.setCurrentChild(childId)
-```
-
-#### Get Child Age
-```kotlin
-val age = repository.getChildAge(childId)
-println("Age: $age") // "8 months"
-```
-
-#### Update Child Info
-```kotlin
-repository.updateChild(childId, mapOf(
-    "allergies" to listOf("Peanuts", "Dairy"),
-    "medicalHistory" to "Eczema"
-))
+Single-File Architecture
+────────────────────────────────────────────────────────
+moe-kyaw-aung-portfolio-v5.html
+│
+├── <head>
+│   ├── SEO Meta Tags (OpenGraph, Twitter Card, robots)
+│   ├── Google Fonts (Orbitron + Nunito via CDN)
+│   ├── Font Awesome 6.5 Icons (via CDN)
+│   └── <style> — 1,200+ lines of CSS
+│       ├── CSS Custom Properties (Light + Dark themes)
+│       ├── 40+ Component Styles
+│       └── Responsive Breakpoints (1100px, 900px, 600px)
+│
+└── <body>
+    ├── Preloader Overlay
+    ├── Lightbox Modal (Certificate Viewer)
+    ├── Left Sidebar Navigation
+    ├── Sticky CTA + Back-to-Top
+    ├── <main> — 14 Full Sections
+    └── <script> — 350+ lines Vanilla JS
+        ├── Canvas particle system
+        ├── IntersectionObserver animations
+        ├── Certificate filter + lightbox
+        ├── Animated counter
+        ├── Testimonial slider
+        ├── Form validation
+        └── Parallax engine
 ```
 
 ---
 
-## 🔐 Biometric Authentication
+## ⚡ Features
 
-### Features
-- Fingerprint authentication
-- Face recognition (device dependent)
-- Secure local storage
-- Quick unlock for trusted devices
-- Privacy protection for sensitive data
+### 🎭 Visual & Animated
 
-### Setup
+| Feature | Implementation |
+|---|---|
+| 🌊 **Animated Preloader** | Dual-ring orbit with glowing core + fade-out |
+| 🎆 **Particle Hero Canvas** | 90 interactive particles with mouse-following lines |
+| 🪟 **Glasspunk Design** | `backdrop-filter: blur()` layered glass cards |
+| 🌙 **Dark/Light Theme** | CSS custom properties + `localStorage` persistence |
+| 🔢 **Counter Animation** | `requestAnimationFrame` with `IntersectionObserver` |
+| 📜 **Scroll Fade Animations** | `.fi / .fl / .fr` classes with staggered delays |
+| 🌊 **Parallax Layers** | Depth-based scroll on decorative orbs |
+| 🎠 **Testimonial Slider** | 5s auto-play with manual nav + dot indicators |
+| 📦 **Skill Progress Bars** | Viewport-triggered animated CSS bars |
+| 🏅 **Floating Hero Card** | `@keyframes float` with real live stats |
 
-#### 1. Add Dependencies
-```kotlin
-implementation("androidx.biometric:biometric:1.1.0")
+### 🔧 Interactive & Functional
+
+| Feature | Details |
+|---|---|
+| 📷 **Image Lightbox** | Full-screen modal with keyboard navigation |
+| 🔍 **Certificate Filter** | Category buttons dynamically re-render 49 certs |
+| 📱 **Hamburger Menu** | Slide-in sidebar with overlay on mobile |
+| ✅ **Contact Form** | Regex validation, field errors, success message |
+| 📬 **Newsletter Form** | Email validation with confirmation |
+| ❓ **FAQ Accordion** | `max-height` CSS transition expand/collapse |
+| 🔝 **Back-to-Top Button** | Appears after 400px scroll |
+| 📌 **Sticky CTA** | Fixed "Hire Me" button always visible |
+| 🗺️ **Google Maps Embed** | Tachileik, Myanmar location |
+| 🔗 **Smooth Scroll Nav** | `scrollIntoView({behavior:'smooth'})` |
+| 🎯 **Active Nav Sync** | `IntersectionObserver` highlights current section |
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Version | Purpose |
+|---|---|---|
+| HTML5 | 5 | Semantic structure, SEO meta |
+| CSS3 | 3 | Custom properties, animations, glassmorphism |
+| JavaScript | ES6+ | Canvas, observers, validation, slider |
+| Google Fonts | CDN | Orbitron + Nunito |
+| Font Awesome | 6.5.0 | Icon library |
+| GitHub Pages | — | Hosting & deployment |
+
 ```
-
-#### 2. AndroidManifest.xml
-```xml
-<uses-permission android:name="android.permission.USE_BIOMETRIC" />
-```
-
-### Usage
-
-#### Check Biometric Availability
-```kotlin
-val biometricManager = BiometricManager(activity)
-val isAvailable = biometricManager.isBiometricAvailable()
-```
-
-#### Authenticate User
-```kotlin
-biometricManager.authenticate(
-    onSuccess = {
-        // User authenticated
-    },
-    onError = { error ->
-        // Handle error
-    }
-)
-```
-
-#### Enable Biometric
-```kotlin
-biometricManager.enableBiometric(userId)
-```
-
-#### Disable Biometric
-```kotlin
-biometricManager.disableBiometric(userId)
+✅ No Node.js    ✅ No npm/yarn   ✅ No webpack
+✅ No bundler    ✅ No frameworks  ✅ Zero install
+✅ Open file → works immediately in any browser
 ```
 
 ---
 
-## ⌚ Wearable Companion App
+## 🚀 Quick Start
 
-### Features
-- Quick logging from smartwatch
-- Today's summary on wearable
-- Instant sync with phone
-- Voice input support
-- Offline capability
+### Option 1 — GitHub Pages (Recommended)
 
-### WearOS Implementation
-
-```kotlin
-// Quick log feeding
-val wearableSync = WearableDataSyncService()
-wearableSync.quickLogFeeding(duration = 20, amount = 120)
-
-// Quick log temperature
-wearableSync.quickLogTemperature(temp = 37.2f)
-
-// Quick log sleep
-wearableSync.quickLogSleep(duration = 120)
-```
-
-### UI Screens
-
-```kotlin
-// Quick action screen
-WearableQuickLogScreen(
-    onAddEntry = { entry -> },
-    themeColors = themeColors
-)
-
-// Dashboard summary
-WearableDashboard(
-    todayStats = mapOf(
-        "feeding" to 7,
-        "sleep" to 13,
-        "diaper" to 5
-    ),
-    themeColors = themeColors
-)
-```
-
----
-
-## 📤 Offline Sync & Data Queue
-
-### Features
-- Works without internet connection
-- Automatic sync when online
-- Queued entry management
-- Conflict resolution
-- Smart retry mechanism
-- Background sync with WorkManager
-
-### Setup
-
-#### 1. Add Dependencies
-```kotlin
-implementation("androidx.room:room-runtime:2.6.0")
-implementation("androidx.room:room-ktx:2.6.0")
-implementation("androidx.work:work-runtime-ktx:2.8.1")
-
-kapt("androidx.room:room-compiler:2.6.0")
-```
-
-#### 2. Initialize Database
-```kotlin
-val database = BabyCareDatabase.getInstance(context)
-val dao = database.cachedEntryDao()
-```
-
-### Usage
-
-#### Save Entry Offline
-```kotlin
-val syncManager = OfflineSyncManager(context, userId)
-syncManager.saveEntryOffline(entry)
-```
-
-#### Get Unsynced Count
-```kotlin
-syncManager.getUnsyncedCountFlow()
-    .collect { count ->
-        println("Unsynced entries: $count")
-    }
-```
-
-#### Manual Sync
-```kotlin
-syncManager.syncUnsyncedEntries()
-```
-
-#### Schedule Background Sync
-```kotlin
-syncManager.scheduleSyncWork()
-```
-
-#### Data Cleanup
-```kotlin
-syncManager.cleanupOldData(daysOld = 90)
-```
-
----
-
-## 📊 Predictive Analytics
-
-### Metrics Calculated
-
-| Metric | Description | Use Case |
-|--------|-------------|----------|
-| Next Feeding Time | Predicted time for next feeding | Schedule preparation |
-| Expected Sleep Duration | Estimated sleep hours needed | Rest planning |
-| Health Risk Score | Overall health risk assessment | Early warning |
-| Growth Projection | Developmental stage tracking | Milestone monitoring |
-
-### Example
-
-```kotlin
-val analytics = insightsService.generatePredictiveAnalyticsFlow(entries)
-    .collect { prediction ->
-        println("Next feeding: ${prediction.nextFeedingTime}")
-        println("Expected sleep: ${prediction.expectedSleepTime} min")
-        println("Health risk: ${prediction.healthRiskScore}")
-        
-        prediction.recommendedActions.forEach { action ->
-            println("Action: $action")
-        }
-    }
-```
-
----
-
-## 🏥 Health Report Generation
-
-### Report Contents
-
-- **Summary**: Overview of daily/weekly health
-- **Feeding Metrics**:
-  - Total sessions
-  - Average duration
-  - Total amount consumed
-  - Pattern consistency score
-  
-- **Sleep Metrics**:
-  - Total hours
-  - Average session duration
-  - Number of sessions
-  - Sleep quality score
-  
-- **Health Metrics**:
-  - Average temperature
-  - Temperature variance
-  - Overall health score
-  - Health alerts
-  
-- **Recommendations**: AI-generated health recommendations
-- **Alerts**: Critical health alerts
-
-### Export Formats
-
-#### CSV Export
-```kotlin
-val exportManager = DataExportManager(context)
-val csvData = exportManager.exportToCSV()
-// "Date,Time,Type,Duration,Amount,Temperature,Notes\n..."
-```
-
-#### JSON Export
-```kotlin
-val jsonData = exportManager.exportToJSON()
-// Structured JSON with full metadata
-```
-
-#### Share Report
-```kotlin
-exportManager.shareExport(csvData)
-```
-
----
-
-## 🔄 Integration Flow
-
-### User Journey: Multi-Child Household
-
-```
-1. Sign Up → Create Account
-2. Add Children → Create profiles for each child
-3. Enable Biometric → Secure quick unlock
-4. Set Preferences → Notification settings, quiet hours
-5. Start Tracking → Log daily activities
-6. Offline Ready → Works without internet
-7. Auto-Sync → Syncs when online
-8. Get Insights → AI analyzes patterns
-9. Receive Notifications → Smart reminders
-10. View Reports → Comprehensive health reports
-```
-
----
-
-## 📊 Advanced Analytics Dashboard
-
-### Components
-
-1. **Health Insights Widget**
-   - Top 3 current insights
-   - Severity indicators
-   - Actionable recommendations
-
-2. **Predictive Analytics Widget**
-   - Next feeding time
-   - Sleep recommendation
-   - Health risk gauge
-
-3. **Multi-Child Summary**
-   - Quick stats for all children
-   - Switch child button
-   - Per-child alerts
-
-4. **Growth Tracking**
-   - Age progression
-   - Milestone checklist
-   - Photo timeline
-
----
-
-## 🔐 Security Best Practices
-
-### Data Protection
-
-1. **Biometric Authentication**
-   - Protects data on device
-   - Secure keychain storage
-
-2. **Firebase Security Rules**
-   - User-specific data access
-   - Collection-level permissions
-   - Field-level validation
-
-3. **Encryption**
-   - HTTPS for all network calls
-   - Local encryption for sensitive data
-   - Encrypted storage backup
-
-### Privacy
-
-1. **Data Minimization**
-   - Only collect necessary data
-   - Auto-delete old data (90 days default)
-   - Anonymize when possible
-
-2. **User Control**
-   - Export own data
-   - Delete data on demand
-   - Clear privacy settings
-
----
-
-## 🚀 Performance Optimization
-
-### Caching Strategy
-
-```kotlin
-// Memory cache for current day
-val todayCache = mutableMapOf<String, List<BabyCareEntry>>()
-
-// Database cache for offline
-// Firebase cache for network efficiency
-
-// Clear cache periodically
-database.cachedEntryDao().deleteOldEntries(cutoffTime)
-```
-
-### Network Optimization
-
-- Batch requests into single Firestore call
-- Compress photos before upload
-- Lazy load images
-- Pagination for large datasets
-
-### Database Optimization
-
-- Proper indexing on frequently queried fields
-- Soft delete instead of hard delete
-- Archive old data to separate collection
-
----
-
-## 📱 Installation for Pro Max
-
-### 1. Clone/Update Project
 ```bash
-git clone https://github.com/yourusername/baby-care-tracker
-cd baby-care-tracker
+# 1. Fork this repository on GitHub
+# 2. Settings → Pages → Source: GitHub Actions → Save
+# 3. Push any commit → auto-deploys in ~60 seconds
+# Live at: https://YOUR-USERNAME.github.io/Moe-Kyaw-Aung-portfolio-V5/
 ```
 
-### 2. Install Additional Dependencies
-```gradle
-// In build.gradle.kts
+### Option 2 — Clone & Open Locally
 
-dependencies {
-    // Firebase
-    implementation("com.google.firebase:firebase-messaging:23.4.0")
-    
-    // AI
-    implementation("com.google.ai.client.generativeai:google-generativeai:0.1.1")
-    
-    // Biometric
-    implementation("androidx.biometric:biometric:1.1.0")
-    
-    // Room Database
-    implementation("androidx.room:room-runtime:2.6.0")
-    implementation("androidx.room:room-ktx:2.6.0")
-    
-    // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
-}
-```
-
-### 3. Setup Keys
-
-#### Firebase Console
-- Create project
-- Enable Firestore, Storage, Authentication
-- Download `google-services.json`
-
-#### Google AI Studio
-- Create API key for Gemini
-- Add to `local.properties` or environment variable
-
-#### AndroidManifest.xml
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.USE_BIOMETRIC" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-```
-
-### 4. Build & Run
 ```bash
-./gradlew build
-./gradlew installDebug
+git clone https://github.com/Dev-moe-kyawaung/Moe-Kyaw-Aung-portfolio-V5.git
+cd Moe-Kyaw-Aung-portfolio-V5
+
+# macOS
+open moe-kyaw-aung-portfolio-v5.html
+
+# Windows
+start moe-kyaw-aung-portfolio-v5.html
+
+# Linux
+xdg-open moe-kyaw-aung-portfolio-v5.html
+```
+
+### Option 3 — VS Code Live Server
+
+```bash
+# Install "Live Server" extension by Ritwick Dey
+# Right-click moe-kyaw-aung-portfolio-v5.html
+# → "Open with Live Server"
+# Opens at http://127.0.0.1:5500/
+```
+
+### Option 4 — Python HTTP Server
+
+```bash
+cd Moe-Kyaw-Aung-portfolio-V5
+python -m http.server 8080
+# Visit http://localhost:8080/moe-kyaw-aung-portfolio-v5.html
 ```
 
 ---
 
-## 🧪 Testing
+## 📁 File Structure
 
-### Unit Tests
-```kotlin
-@RunWith(AndroidJUnit4::class)
-class OfflineSyncTest {
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
+```
+📁 Moe-Kyaw-Aung-portfolio-V5/
+│
+├── 📄 moe-kyaw-aung-portfolio-v5.html   ← Main portfolio (single file)
+├── 📄 README.md                          ← This file
+├── 📄 LICENSE                            ← MIT License
+├── 📄 CHANGELOG.md                       ← Version history
+├── 📄 CONTRIBUTING.md                    ← Contribution guide
+├── 📄 .gitignore                         ← Git ignore rules
+│
+├── 📁 .github/
+│   ├── 📁 workflows/
+│   │   └── 📄 deploy.yml                 ← GitHub Pages auto-deploy
+│   ├── 📁 ISSUE_TEMPLATE/
+│   │   ├── 📄 bug_report.md
+│   │   └── 📄 feature_request.md
+│   └── 📄 PULL_REQUEST_TEMPLATE.md
+│
+├── 📁 assets/
+│   └── 📁 images/                        ← Screenshots (optional)
+│
+└── 📁 docs/
+    └── 📄 CUSTOMIZATION.md               ← How to personalize
+```
 
-    @Test
-    fun testSaveEntryOffline() {
-        val entry = BabyCareEntry(type = EntryType.FEEDING)
-        runBlocking {
-            syncManager.saveEntryOffline(entry)
-            assert(syncManager.getUnsyncedCountFlow() > 0)
-        }
-    }
+---
+
+## 🎯 Sections Breakdown
+
+<details>
+<summary><b>🏠 Hero Section</b></summary>
+
+- Animated Canvas: 90 interactive particles with mouse-following lines
+- Floating glasspunk info card (5+ years, 49+ certs, 22 repos)
+- Availability badge with animated green dot
+- Tech chips: Kotlin, Jetpack Compose, Firebase, REST APIs, Clean Architecture, Azure DevOps
+- CTA buttons: View Projects, Hire Me, GitHub
+
+</details>
+
+<details>
+<summary><b>👤 About Section</b></summary>
+
+- Real Gravatar profile photo with glowing border
+- Floating badge "49+ Certifications"
+- Info grid: Location, Email, Phone, LinkedIn, Timezone
+- Education tags, bio paragraphs
+- Gravatar + LinkedIn CTA buttons
+
+</details>
+
+<details>
+<summary><b>💻 Skills (12 animated bars)</b></summary>
+
+Kotlin 95% · Jetpack Compose 92% · Clean Architecture 93% · Firebase 90% · REST APIs 88% · Room/DataStore 88% · Azure DevOps 82% · CI/CD 85% · Python 80% · React 78% · AI/ML 72% · Cyber Security 75%
+
+</details>
+
+<details>
+<summary><b>📊 Stats Counter</b></summary>
+
+Animated counters on viewport entry: 5+ Years · 49+ Certifications · 22 Repos · 12 Verified Socials
+
+</details>
+
+<details>
+<summary><b>🚀 Projects (6 real repos)</b></summary>
+
+| Project | Stack |
+|---|---|
+| PulseSync Android | Kotlin, Firebase, MVVM, CI/CD |
+| PulseSync Azure | Kotlin, MSAL, SignalR, Cosmos DB |
+| Portfolio Website | HTML5, CSS3, JavaScript |
+| Android Roadmaps | Kotlin, Architecture Patterns |
+| GitIgnore.io Fork | Swift |
+| GitHub MCP Server | Go, MCP, AI |
+
+</details>
+
+<details>
+<summary><b>🏅 Certificates (49 with lightbox)</b></summary>
+
+Filterable gallery by category: Mobile Dev · Web Dev · Security · Cloud & AI · Other.
+Click any certificate → full-screen lightbox with keyboard navigation (← → Esc).
+
+</details>
+
+<details>
+<summary><b>🐙 GitHub Accounts</b></summary>
+
+Dev-moe-kyawaung (main, 22 repos) + Moekyawaung (personal) with pinned repositories grid.
+
+</details>
+
+<details>
+<summary><b>🏢 Organizations</b></summary>
+
+Microsoft · Google Developers Launchpad · Programming Hub · University of Computer Studies · E-4Skills Myanmar · Open Source Community
+
+</details>
+
+<details>
+<summary><b>🔗 Social Links (16 platforms)</b></summary>
+
+All accounts from Gravatar verification. See Social Links section below.
+
+</details>
+
+<details>
+<summary><b>💬 Testimonials Slider</b></summary>
+
+4 client testimonials with 5-second auto-play, manual controls, dot navigation.
+
+</details>
+
+<details>
+<summary><b>💰 Pricing Table</b></summary>
+
+Starter $800 · Professional $2,500 (featured) · Enterprise Custom
+
+</details>
+
+<details>
+<summary><b>❓ FAQ Accordion (6 items)</b></summary>
+
+Technologies · Remote work · Development process · Legacy code · Certifications · Post-launch support
+
+</details>
+
+<details>
+<summary><b>📬 Newsletter + Contact</b></summary>
+
+Newsletter with email validation. Contact form with full validation + Google Maps (Tachileik, Myanmar).
+
+</details>
+
+---
+
+## 📜 Certificates (49+)
+
+<details>
+<summary><b>📱 Mobile Development (11 certs)</b></summary>
+
+Kotlin for Android · Android Development · Jetpack/Android · Flutter · Kotlin · iOS App Development · Ionic · React Native · JavaFX · Firebase · Swift
+
+</details>
+
+<details>
+<summary><b>🌐 Web Development (12 certs)</b></summary>
+
+React · Bootstrap · HTML Advanced · HTML · JavaScript · Angular JS · Backbone JS · Bulma CSS · Foundation Framework · Elm · WordPress · Django
+
+</details>
+
+<details>
+<summary><b>🔐 Security (4 certs)</b></summary>
+
+Cyber Security · Ethical Hacking · Hacking Advanced · Cryptography
+
+</details>
+
+<details>
+<summary><b>☁️ Cloud & AI (8 certs)</b></summary>
+
+Artificial Intelligence · Machine Learning · AWS Cloud Computing · Big Data Analytics · ChatGPT · DevOps · Edge Computing · IOT
+
+</details>
+
+<details>
+<summary><b>🔧 Other (14+ certs)</b></summary>
+
+Ruby · Lua · Linux · Git · Java Advanced · Python · Python Advanced · Python 3 · Software Engineering · Growth Hacking · Digital Marketing Advanced · Google Ads Measurement · Google Shopping Ads · Google Display Ads
+
+</details>
+
+> 🏆 All certificates issued by **Programming Hub** in partnership with **Google Developers Launchpad**
+
+---
+
+## 🔗 Social Links
+
+All verified via [Gravatar — moekyawaung2026](https://gravatar.com/moekyawaung2026)
+
+| Platform | Link |
+|---|---|
+| GitHub (Dev) | [Dev-moe-kyawaung](https://github.com/Dev-moe-kyawaung) |
+| GitHub (Personal) | [Moekyawaung](https://github.com/Moekyawaung) |
+| LinkedIn | [moe-kyaw-aung](https://www.linkedin.com/in/moe-kyaw-aung-2653093a1) |
+| Gravatar | [moekyawaung2026](https://gravatar.com/moekyawaung2026) |
+| WordPress Blog | [valiantblaze](https://valiantblaze20aa517f1a-xvtkh.wordpress.com) |
+| Bluesky | [@moekyawaung96](https://bsky.app/profile/moekyawaung96.bsky.social) |
+| TikTok | [@moelay262411](https://tiktok.com/@moelay262411) |
+| YouTube | [MKA Channel](https://www.youtube.com/channel/UCdGC3lLlIPnb2VIL_qS65OQ) |
+| Reddit | [Mobile-Chemistry4675](https://www.reddit.com/user/Mobile-Chemistry4675) |
+| Pinterest | [moekyawaung13721](https://www.pinterest.com/moekyawaung13721) |
+| Tumblr | [moekyawaung](https://www.tumblr.com/moekyawaung) |
+| Flickr | [204037451@N06](https://www.flickr.com/people/204037451@N06) |
+| Twitch | [moekyawaung137](https://twitch.tv/moekyawaung137) |
+| Vimeo | [user252414232](https://vimeo.com/user252414232) |
+| Email | moekyawaung@fastmail.com |
+| Phone | +959 666 000 050 |
+
+---
+
+## 📦 GitHub Actions CI/CD
+
+This repo auto-deploys to GitHub Pages on every push to `main`.
+
+```yaml
+Trigger: push to main
+Action:  Deploy → GitHub Pages
+Result:  https://dev-moe-kyawaung.github.io/Moe-Kyaw-Aung-portfolio-V5/
+Time:    ~60 seconds
+```
+
+**Enable GitHub Pages:**
+```
+Repository → Settings → Pages → Source: GitHub Actions → Save
+```
+
+---
+
+## ⚙️ Customization
+
+<details>
+<summary><b>Personal Info</b></summary>
+
+Edit the hero title, subtitle, and bio paragraphs in `moe-kyaw-aung-portfolio-v5.html` around the `#hero` section.
+
+</details>
+
+<details>
+<summary><b>Profile Photo</b></summary>
+
+Replace all Gravatar URLs with your own. To get your Gravatar hash: MD5 of your email (lowercase, trimmed).
+
+</details>
+
+<details>
+<summary><b>Color Theme</b></summary>
+
+```css
+:root {
+  --primary:   #9b8ec4;  /* Your brand color */
+  --secondary: #7c6daa;  /* Secondary color */
+  --accent:    #c084fc;  /* Accent color */
+  --bg:        #F5F3FF;  /* Background */
 }
 ```
 
-### Integration Tests
-- Test Firebase sync
-- Test offline functionality
-- Test multi-child switching
-- Test biometric authentication
+</details>
+
+<details>
+<summary><b>Certificates</b></summary>
+
+```javascript
+const CERTS = [
+  {nm:'Certificate Name', cat:'mobile', url:'https://your-cert-url.jpg'},
+];
+```
+
+Categories: `mobile` · `web` · `security` · `cloud` · `other`
+
+</details>
+
+See [docs/CUSTOMIZATION.md](docs/CUSTOMIZATION.md) for the complete guide.
 
 ---
 
-## 📚 API Reference
+## 🌐 Browser Support
 
-### NotificationManager
-- `subscribeTopic(topic: String)`
-- `unsubscribeTopic(topic: String)`
-- `scheduleFeedingReminders(intervalHours: Int)`
-- `scheduleSleepReminders(bedtimeHour: Int, bedtimeMinute: Int)`
-- `enableHealthMonitoring()`
-- `sendLocalNotification(title, message, type)`
-- `getNotificationPreferences()`
-- `updateNotificationPreferences(prefs)`
-- `cancelAllReminders()`
-
-### AIInsightsService
-- `generateHealthInsightsFlow(entries): Flow<List<HealthInsight>>`
-- `generatePredictiveAnalyticsFlow(entries): Flow<PredictiveAnalytics>`
-- `generateHealthReport(entries): HealthReport`
-
-### ChildrenRepository
-- `getChildrenFlow(): Flow<List<Child>>`
-- `addChild(child): String`
-- `updateChild(childId, updates)`
-- `deleteChild(childId)`
-- `setCurrentChild(childId)`
-- `getChild(childId): Child?`
-- `getChildAge(childId): String`
-
-### OfflineSyncManager
-- `saveEntryOffline(entry)`
-- `getUnsyncedEntriesFlow(): Flow<List<CachedEntry>>`
-- `getUnsyncedCountFlow(): Flow<Int>`
-- `syncUnsyncedEntries(): SyncResult`
-- `scheduleSyncWork()`
-- `cleanupOldData(daysOld)`
+| Browser | Minimum Version | Support |
+|---|---|---|
+| Chrome | 90+ | ✅ Full |
+| Firefox | 88+ | ✅ Full |
+| Safari | 14+ | ✅ Full |
+| Edge | 90+ | ✅ Full |
+| Opera | 76+ | ✅ Full |
+| Mobile Chrome | 90+ | ✅ Full |
+| Mobile Safari | 14+ | ✅ Full |
 
 ---
 
-## 🎯 Version Comparison
+## ♿ Accessibility
 
-| Feature | Free | Pro | Pro Max |
-|---------|------|-----|---------|
-| Basic Tracking | ✅ | ✅ | ✅ |
-| Analytics | ✅ | ✅ | ✅ |
-| Themes | 1 | 5 | 5 |
-| Push Notifications | ❌ | ✅ | ✅ |
-| AI Insights | ❌ | ❌ | ✅ |
-| Multi-Child | ❌ | ✅ | ✅ |
-| Biometric Auth | ❌ | ✅ | ✅ |
-| Wearable App | ❌ | ❌ | ✅ |
-| Offline Sync | ❌ | ❌ | ✅ |
-| Health Reports | ❌ | ✅ | ✅ |
+- ✅ Semantic HTML5 (`<main>`, `<section>`, `<nav>`, `<aside>`, `<footer>`)
+- ✅ All images have `alt` attributes
+- ✅ ARIA labels on all interactive elements
+- ✅ Keyboard navigation (Tab, Enter, Escape, Arrows)
+- ✅ Color contrast ratio ≥ 4.5:1
+- ✅ Focus-visible outlines
+- ✅ `role` attributes on modals and navigation
+- ✅ `loading="lazy"` on all certificate images
 
 ---
 
-## 🐛 Troubleshooting
+## 📈 Performance
 
-### Push Notifications Not Working
-- Verify FCM token is sent to server
-- Check notification permissions in AndroidManifest
-- Ensure Firebase Cloud Messaging is enabled
+| Metric | Target |
+|---|---|
+| First Contentful Paint | < 1.2s |
+| Time to Interactive | < 1.8s |
+| Lighthouse Performance | 90+ |
+| Lighthouse Accessibility | 95+ |
+| Lighthouse SEO | 100 |
 
-### AI Insights Not Generating
-- Verify Gemini API key is valid
-- Check internet connection
-- Review API quota limits
-
-### Multi-Child Switching Issues
-- Clear app cache
-- Verify Firestore rules allow multi-collection access
-- Check currentChildId in user document
-
-### Offline Sync Problems
-- Run `syncManager.syncUnsyncedEntries()` manually
-- Check Room database integrity
-- Review sync worker logs
+**Optimizations:** `loading="lazy"` on images · `IntersectionObserver` instead of scroll listeners · `requestAnimationFrame` for animations · CDN fonts with `preconnect` · CSS custom properties for O(1) theme switch
 
 ---
 
-**Last Updated**: 2024
-**Version**: 1.0 Pro Max
-**Developed by**: Moekyaw (Senior Android Developer)
+## 🗺️ Roadmap
+
+| Version | Feature | Status |
+|---|---|---|
+| V5.0.0 | Full single-file portfolio | ✅ Released |
+| V5.1.0 | EmailJS contact form integration | 🔄 Planned |
+| V5.2.0 | Blog section with Markdown | 🔄 Planned |
+| V5.3.0 | PWA support (manifest + service worker) | 🔄 Planned |
+| V6.0.0 | React/Next.js rebuild with CMS | 🔮 Future |
+
+---
+
+## 🤝 Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting pull requests.
+
+```bash
+git checkout -b feature/YourFeature
+git commit -m "feat: add YourFeature"
+git push origin feature/YourFeature
+# → Open Pull Request
+```
+
+Commit convention: `feat:` · `fix:` · `docs:` · `style:` · `refactor:` · `perf:`
+
+---
+
+## 📄 License
+
+MIT License — Copyright (c) 2026 Moe Kyaw Aung. See [LICENSE](LICENSE) for full text.
+
+---
+
+## 📞 Contact
+
+<div align="center">
+
+**Moe Kyaw Aung** · Senior Android Developer · Tachileik, Myanmar 🇲🇲
+
+[![Email](https://img.shields.io/badge/Email-moekyawaung@fastmail.com-9b8ec4?style=for-the-badge&logo=fastmail&logoColor=white)](mailto:moekyawaung@fastmail.com)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/moe-kyaw-aung-2653093a1)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-24292e?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dev-moe-kyawaung)
+[![Gravatar](https://img.shields.io/badge/Gravatar-Profile-1e73be?style=for-the-badge)](https://gravatar.com/moekyawaung2026)
+
+<br/>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,14,16,18,20&height=120&section=footer&text=Available%20for%20Remote%20Work&fontSize=22&fontColor=fff&animation=fadeIn" alt="Footer Banner" width="100%"/>
+
+**⭐ Star this repo if it inspired you! ⭐**
+
+*Made with ❤️ from Tachileik, Myanmar · Portfolio V5 · 2026*
+
+</div>
